@@ -9,7 +9,7 @@ const Header = () => {
 				src='/logo.svg'
 				alt='logo'
 				width={90}
-				height={999}
+				height={40}
 			/>
 
 			<ModeToggle />
