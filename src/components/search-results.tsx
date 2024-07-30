@@ -6,7 +6,7 @@ type SearchResultsProps = {
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
     return (
-        <section className='mb-6'>
+        <section>
             <h2 className='mb-2 text-lg font-bold text-card-foreground'>
                 Last Search Results
             </h2>

@@ -9,13 +9,13 @@ type SearchInputProps = {
 
 const SearchForm: React.FC<SearchInputProps> = ({ handleSubmit }) => {
     return (
-        <form className='mb-6 flex items-center' action={handleSubmit}>
+        <form className='flex items-center gap-4' action={handleSubmit}>
             <Input
                 type='text'
                 name='postalCode'
-                placeholder='Enter a postal code or address'
+                placeholder='Enter a postal code'
                 ref={withMask('99999-999')}
-                className='mr-4 flex-1 border-card-foreground/20 bg-card text-card-foreground'
+                className='flex-1 border-card-foreground/20 bg-card text-card-foreground'
             />
             <Button type='submit'>Search</Button>
         </form>

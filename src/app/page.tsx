@@ -86,8 +86,8 @@ export default function Home() {
 
     return (
         <main className='flex h-[calc(100vh-4.5rem)] flex-col items-center justify-center'>
-            <div className='w-full max-w-md rounded-lg bg-card p-6 shadow-lg'>
-                <h1 className='mb-4 text-2xl font-bold text-card-foreground'>
+            <div className='w-full max-w-md space-y-4 rounded-lg bg-card p-6 shadow-lg dark:shadow-white/5'>
+                <h1 className='text-2xl font-bold text-card-foreground'>
                     Postal Code & Address Search
                 </h1>
                 <SearchForm handleSubmit={handleSubmit} />
