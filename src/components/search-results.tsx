@@ -8,7 +8,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
     return (
         <section>
             <h2 className='mb-2 text-lg font-bold text-card-foreground'>
-                Last Search Results
+                Últimos resultados da pesquisa
             </h2>
             {results.length > 0 ? (
                 <ul className='space-y-2'>
@@ -28,7 +28,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
                     ))}
                 </ul>
             ) : (
-                <p className='text-muted-foreground'>No search results yet.</p>
+                <p className='text-muted-foreground'>
+                    Nenhum resultado de pesquisa ainda.
+                </p>
             )}
         </section>
     );

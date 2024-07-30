@@ -16,13 +16,13 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({
     return (
         <section>
             <div className='my-2 flex items-center gap-2 text-card-foreground'>
-                <h2 className='text-lg font-bold'>Search History</h2>
+                <h2 className='text-lg font-bold'>Histórico de pesquisa</h2>
                 {isLoading && <Loader2 className='size-5 animate-spin' />}
             </div>
 
             {isLoading ? (
                 <p className='text-muted-foreground'>
-                    Loading search history...
+                    Carregando histórico de pesquisa ...
                 </p>
             ) : history.length > 0 ? (
                 <div className='max-h-72 overflow-y-auto'>
@@ -42,7 +42,9 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({
                     </ul>
                 </div>
             ) : (
-                <p className='text-muted-foreground'>No search history yet.</p>
+                <p className='text-muted-foreground'>
+                    Nenhum histórico de pesquisa ainda.
+                </p>
             )}
         </section>
     );

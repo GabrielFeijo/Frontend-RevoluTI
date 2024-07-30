@@ -13,11 +13,11 @@ const SearchForm: React.FC<SearchInputProps> = ({ handleSubmit }) => {
             <Input
                 type='text'
                 name='postalCode'
-                placeholder='Enter a postal code'
+                placeholder='Insira um código postal'
                 ref={withMask('99999-999')}
                 className='flex-1 border-card-foreground/20 bg-card text-card-foreground'
             />
-            <Button type='submit'>Search</Button>
+            <Button type='submit'>Pesquisar</Button>
         </form>
     );
 };
