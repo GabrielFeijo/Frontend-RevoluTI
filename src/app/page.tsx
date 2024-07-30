@@ -28,6 +28,7 @@ export default function Home() {
     const { sessionId } = useSession();
 
     const [searchResults, setSearchResults] = useState<Address[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [selectedHistoryItem, setSelectedHistoryItem] =
         useState<Address | null>(null);
@@ -40,11 +41,11 @@ export default function Home() {
     });
 
     const handleSubmit = async (data: FormData) => {
+        setIsLoading(true);
         try {
             if (!sessionId) return null;
 
             const formData = Object.fromEntries(data.entries());
-
             const response = formSchema.safeParse(formData);
 
             if (!response.success) {
@@ -70,6 +71,8 @@ export default function Home() {
             if (error instanceof Error) {
                 toast.error(error.message);
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -115,7 +118,7 @@ export default function Home() {
                 <h1 className='text-2xl font-bold text-card-foreground'>
                     Postal Code & Address Search
                 </h1>
-                <SearchForm handleSubmit={handleSubmit} />
+                <SearchForm handleSubmit={handleSubmit} isLoading={isLoading} />
                 <SearchResults results={searchResults} />
 
                 <SearchHistory
