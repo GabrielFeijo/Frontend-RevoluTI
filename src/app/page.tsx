@@ -7,6 +7,7 @@ import isPostalCode from 'validator/lib/isPostalCode';
 import { z } from 'zod';
 
 import { createAddress } from '@/api/create-address';
+import { deleteAddress } from '@/api/delete-address';
 import { getAddressHistoryBySessionId } from '@/api/get-address-history-by-session';
 import HistoryDetailModal from '@/components/history-detail-modal';
 import SearchForm from '@/components/search-form';
@@ -84,6 +85,30 @@ export default function Home() {
         setSelectedHistoryItem(null);
     };
 
+    const handleDeleteHistoryItem = async () => {
+        try {
+            if (!selectedHistoryItem) return;
+
+            await deleteAddress({ id: selectedHistoryItem.id });
+
+            queryClient.setQueryData(
+                ['address-history'],
+                (oldData: Address[]) => {
+                    return oldData?.filter(
+                        (item) => item.id !== selectedHistoryItem.id,
+                    );
+                },
+            );
+
+            closeModal();
+            toast.success('Endereço excluído com sucesso!');
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
     return (
         <main className='flex h-[calc(100vh-4.5rem)] flex-col items-center justify-center'>
             <div className='w-full max-w-md space-y-4 rounded-lg bg-card p-6 shadow-lg dark:shadow-white/5'>
@@ -100,6 +125,7 @@ export default function Home() {
                 />
             </div>
             <HistoryDetailModal
+                handleDeleteHistoryItem={handleDeleteHistoryItem}
                 selectedItem={selectedHistoryItem}
                 closeModal={closeModal}
             />
