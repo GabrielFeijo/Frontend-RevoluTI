@@ -18,9 +18,12 @@ Este repositório contém o código frontend para o projeto de CEP Finder, desen
 
 - Pesquisa e visualização de endereços com base no CEP.
 - Exibição do histórico de pesquisas realizadas.
+  - Você poderá ver detalhes de sua pesquisa e ter um link direto para o Google Maps com a localização em questão.
 - Interface intuitiva com componentes modernos e responsivos.
 - Modo claro e escuro para uma experiência de usuário personalizada.
-- Sessão de usuário usando local storage.
+- Sessão de usuário usando local storage, construída automaticamente ao carregar a página no navegador. Se uma sessão ativa já existir, os dados são recuperados; caso contrário, uma nova sessão é criada para o navegador.
+- Uso do TanStack Query para otimizar as requisições e utilizar cache, melhorando o desempenho e a experiência do usuário.
+- Utilização do Docker para otimizar o build e facilitar o gerenciamento do ambiente de desenvolvimento.
 
 ## 👾 Experimente
 
