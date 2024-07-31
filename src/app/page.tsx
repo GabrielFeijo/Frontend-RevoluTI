@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import isPostalCode from 'validator/lib/isPostalCode';
-import { z } from 'zod';
 
 import { createAddress } from '@/api/create-address';
 import { deleteAddress } from '@/api/delete-address';
@@ -15,23 +13,17 @@ import SearchHistory from '@/components/search-history';
 import SearchResults from '@/components/search-results';
 import { useSession } from '@/contexts/SessionContext';
 import Address from '@/interfaces/address';
-
-const formSchema = z.object({
-    postalCode: z.string().refine((val) => isPostalCode(val, 'BR'), {
-        message: 'Invalid postal code',
-    }),
-});
+import { formSchema } from '@/schemas/formSchema';
 
 export default function Home() {
     const queryClient = useQueryClient();
 
     const { sessionId } = useSession();
 
-    const [searchResults, setSearchResults] = useState<Address[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-
     const [selectedHistoryItem, setSelectedHistoryItem] =
         useState<Address | null>(null);
+    const [searchResults, setSearchResults] = useState<Address[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { data: searchHistory, isLoading: isLoadingHistory } = useQuery({
         queryKey: ['address-history'],
@@ -40,76 +32,89 @@ export default function Home() {
         enabled: !!sessionId,
     });
 
-    const handleSubmit = async (data: FormData) => {
+    const handleSubmit = (data: FormData) => {
         setIsLoading(true);
-        try {
-            if (!sessionId) return null;
 
-            const formData = Object.fromEntries(data.entries());
-            const response = formSchema.safeParse(formData);
-
-            if (!response.success) {
-                return toast.error('O CEP é inválido!');
-            }
-
-            const newAddress = await createAddress({
-                cep: response.data?.postalCode as string,
-                sessionId,
-            });
-
-            queryClient.setQueryData(
-                ['address-history'],
-                (oldData: Address[]) => {
-                    return [newAddress, ...oldData];
-                },
+        if (!sessionId) {
+            toast.error(
+                'Sessão não encontrada. Por favor, recarregue a página.',
             );
-
-            setSearchResults([newAddress]);
-
-            toast.success('Endereço adicionado com sucesso!');
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        } finally {
             setIsLoading(false);
+            return;
         }
+
+        const formData = Object.fromEntries(data.entries());
+        const response = formSchema.safeParse(formData);
+
+        if (!response.success) {
+            const errorMessage =
+                response.error.format().postalCode?._errors.join(', ') ||
+                'Erro de validação';
+            toast.error(`Erro: ${errorMessage}`);
+            setIsLoading(false);
+            return;
+        }
+
+        createAddress({
+            cep: response.data?.postalCode,
+            sessionId,
+        })
+            .then((newAddress) => {
+                queryClient.setQueryData(
+                    ['address-history'],
+                    (oldData: Address[] = []) => [newAddress, ...oldData],
+                );
+                setSearchResults([newAddress]);
+                toast.success('Endereço adicionado com sucesso!');
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    toast.error(`Erro: ${error.message}`);
+                } else {
+                    toast.error('Ocorreu um erro inesperado.');
+                }
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const handleHistoryItemClick = (id: string) => {
         const address = searchHistory?.find((item) => item.id === id);
-
-        if (!address) return;
-
-        setSelectedHistoryItem(address);
+        if (address) {
+            setSelectedHistoryItem(address);
+        }
     };
 
     const closeModal = () => {
         setSelectedHistoryItem(null);
     };
 
-    const handleDeleteHistoryItem = async () => {
-        try {
-            if (!selectedHistoryItem) return;
+    const handleDeleteHistoryItem = () => {
+        if (!selectedHistoryItem) return;
 
-            await deleteAddress({ id: selectedHistoryItem.id });
-
-            queryClient.setQueryData(
-                ['address-history'],
-                (oldData: Address[]) => {
-                    return oldData?.filter(
-                        (item) => item.id !== selectedHistoryItem.id,
-                    );
-                },
-            );
-
-            closeModal();
-            toast.success('Endereço excluído com sucesso!');
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
+        deleteAddress({
+            id: selectedHistoryItem.id,
+        })
+            .then(() => {
+                queryClient.setQueryData(
+                    ['address-history'],
+                    (oldData: Address[]) => {
+                        return oldData?.filter(
+                            (item) => item.id !== selectedHistoryItem.id,
+                        );
+                    },
+                );
+                closeModal();
+                toast.success('Endereço excluído com sucesso!');
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    toast.error(`Erro: ${error.message}`);
+                } else {
+                    toast.error('Ocorreu um erro inesperado.');
+                }
+            });
     };
 
     return (
@@ -118,6 +123,7 @@ export default function Home() {
                 <h1 className='text-2xl font-bold text-card-foreground'>
                     Postal Code & Address Search
                 </h1>
+
                 <SearchForm handleSubmit={handleSubmit} isLoading={isLoading} />
                 <SearchResults results={searchResults} />
 
