@@ -22,7 +22,11 @@ Este repositório contém o código frontend para o projeto de CEP Finder, desen
 - Interface intuitiva com componentes modernos e responsivos.
 - Modo claro e escuro para uma experiência de usuário personalizada.
 - Sessão de usuário usando local storage, construída automaticamente ao carregar a página no navegador. Se uma sessão ativa já existir, os dados são recuperados; caso contrário, uma nova sessão é criada para o navegador.
+- Uso do TanStack Query para otimizar as requisições e utilizar cache, melhorando o desempenho e a experiência do usuário.
+- Utilização do Docker para otimizar o build e facilitar o gerenciamento do ambiente de desenvolvimento.
 
+
+<!-- 
 ## 👾 Experimente
 
 Para testar a aplicação, acesse os seguintes links:
@@ -30,7 +34,16 @@ Para testar a aplicação, acesse os seguintes links:
 - [Frontend - CEP Finder](https://frontendrevoluti.desafiotecnico.shop/).
 - [Backend - Documentação](https://backendrevoluti.desafiotecnico.shop/api/v1/documentation).
 
-<sub>PS: Optei por utilizar o domínio personalizado desafiotecnico.shop para padronizar o projeto. O frontend está hospedado no frontendrevoluti, enquanto o backend está hospedado no subdomínio backendrevoluti. Ambos os domínios possuem certificação SSL para garantir a segurança da comunicação.</sub>
+<sub>PS: Optei por utilizar o domínio personalizado desafiotecnico.shop para padronizar o projeto. O frontend está hospedado no frontendrevoluti, enquanto o backend está hospedado no subdomínio backendrevoluti. Ambos os domínios possuem certificação SSL para garantir a segurança da comunicação.</sub> 
+-->
+
+## 💻 Imagens da plataforma
+
+<img src="https://i.imgur.com/bm3iLAR.png" width="1920"/>
+
+<img src="https://i.imgur.com/0ZKxCe2.png" width="1920"/>
+
+<img src="https://i.imgur.com/FD1Wl8l.png" width="1920"/>
 
 ## 🚀 Começo
 
